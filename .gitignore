@@ -1,3 +1,5 @@
 output/
 __pycache__/
 *.svg
+data
+notes.txt

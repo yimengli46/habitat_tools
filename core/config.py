@@ -7,13 +7,6 @@ _C = CN()
 
 _C.TASK_CONFIG = CN()
 
-# =============================== dataset and files =============================
-_C.GENERAL = CN()
-_C.GENERAL.SCENE_HEIGHTS_DICT_PATH = 'output/scene_height_distribution'
-_C.GENERAL.BUILD_MAP_CONFIG_PATH = 'configs/habitat_env/build_map_mp3d.yaml'
-_C.GENERAL.HABITAT_SCENE_DATA_PATH = 'data/scene_datasets/'
-_C.GENERAL.RANDOM_SEED = 5
-
 # ==================================== for sensor =======================
 _C.SENSOR = CN()
 _C.SENSOR.DEPTH_MIN = 0.0

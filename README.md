@@ -1,7 +1,22 @@
 # habitat-tools
-This repository provides a minimal set of tools for working with the Habitat environment [[1]](#references) in Python. I built these tools when working on research with the Habitat environment. Hopefully they are helpful to other people.
+This repository provides a minimal set of tools for working with the Habitat environment [[1]](#references) in Python. 
+I built these tools when working on research with the Habitat environment. 
+Hopefully they are helpful to other people.
 
 <img src='Figs/title.png'/>
+
+#### Implementation Progress Overview
+| | Tools | Initial Code | Code Cleanup | Documentation|
+|--|--|--|--|--|
+|1 | demo: build a semantic map  | :heavy_check_mark:
+|2 | demo: build an occupancy map  | :heavy_check_mark:
+|3 | demo: compute scene floor heights  | :heavy_check_mark:
+|4 | build maps with multiprocessing | :heavy_check_mark:
+|5 | get category to index mapping | :heavy_check_mark:
+|6 | build maps via point cloud | :heavy_check_mark:
+|7 | support for HM3D dataset   | :heavy_check_mark:
+|7 | frontier-based exploration | :heavy_check_mark:
+
 
 ## Dependencies
 We use `python==3.7.4`.  
@@ -32,6 +47,28 @@ sudo apt-get install -y --no-install-recommends \
      libjpeg-dev libglm-dev libgl1-mesa-glx libegl1-mesa-dev mesa-utils xorg-dev freeglut3-dev
 git checkout tags/v0.2.2
 python setup.py install --with-cuda
+```
+### Dataset Setup
+Download *scene* dataset of **Matterport3D(MP3D)** from [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here").      
+Upzip the scene data and put it under `habitat-lab/data/scene_datasets/mp3d`.  
+You are also suggested to download *task* dataset of **Point goal Navigation on MP3D** from [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here")  
+Unzip the episode data and put it under `habitat-lab/data/datasets/pointnav/mp3d`.  
+Create softlinks to the data.  
+```
+cd  habitat_tools
+ln -s habitat-lab/data data
+```
+The code requires the datasets in data folder in the following format:
+```
+habitat-lab/data
+                /datasets/pointnav/mp3d/v1
+                                        /train
+                                        /val
+                                        /test
+                scene_datasets/mp3d
+                                    /1LXtFkjw3qL
+                                    /1pXnuDYAj8r
+                                    /....
 ```
 
 
