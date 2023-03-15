@@ -10,7 +10,7 @@ _C.TASK_CONFIG = CN()
 # ==================================== for sensor =======================
 _C.SENSOR = CN()
 _C.SENSOR.DEPTH_MIN = 0.0
-_C.SENSOR.DEPTH_MAX = 10.0
+_C.SENSOR.DEPTH_MAX = 5.0
 _C.SENSOR.SENSOR_HEIGHT = 1.25
 _C.SENSOR.AGENT_HEIGHT = 1.5
 _C.SENSOR.AGENT_RADIUS = 0.1
@@ -40,7 +40,6 @@ _C.FE.COLLISION_VAL = 1
 _C.FE.FREE_VAL = 2
 _C.FE.UNOBSERVED_VAL = 0
 _C.FE.OBSTACLE_THRESHOLD = 1
-_C.FE.GROUP_INFLATION_RADIUS = 0
 
 
 # ================================ for visualization ============================

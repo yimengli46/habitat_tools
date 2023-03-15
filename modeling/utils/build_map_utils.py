@@ -1,8 +1,8 @@
 import numpy as np
 import cv2
-import matplotlib.pyplot as plt
 from .baseline_utils import project_pixels_to_world_coords, apply_color_to_map, save_sem_map_through_plt
 from core import cfg
+import matplotlib.pyplot as plt
 
 
 def find_first_nonzero_elem_per_row(mat):
@@ -20,13 +20,10 @@ def find_first_nonzero_elem_per_row(mat):
     return result
 
 
-""" class used to build semantic maps of the scenes
-
-It takes dense observations of the environment and project pixels to the ground.
-"""
-
-
-class SemanticMap:
+class semantic_map:
+    """ class used to build semantic maps of the scenes.
+    It takes dense observations of the environment and project pixels to the ground.
+    """
 
     def __init__(self, saved_folder):
 
@@ -51,21 +48,12 @@ class SemanticMap:
         self.z_grid = np.arange(self.min_Z, self.max_Z, self.cell_size)
         self.y_grid = np.arange(self.min_Y, self.max_Y, self.cell_size)
 
-        self.THRESHOLD_LOW = 5
         self.THRESHOLD_HIGH = len(self.y_grid)
 
-        print(f'y_grid = {self.y_grid}')
-        print(f'len(y_grid) = {len(self.y_grid)}')
-        print(
-            f'thresh_low = {self.THRESHOLD_LOW}, thresh_high = {self.THRESHOLD_HIGH}')
-
         self.four_dim_grid = np.zeros(
-            (len(self.z_grid), len(self.y_grid)+1,
+            (len(self.z_grid), len(self.y_grid) + 1,
              len(self.x_grid), cfg.SEM_MAP.GRID_CLASS_SIZE),
             dtype=np.int16)  # x, y, z, C
-        print(f'self.four_dim_grid.shape = {self.four_dim_grid.shape}')
-
-        #assert 1==2
 
         # ===================================
         self.H, self.W = len(self.z_grid), len(self.x_grid)
@@ -79,8 +67,9 @@ class SemanticMap:
         """ update semantic map with observations rgb_img, depth_img, sseg_img and robot pose."""
         sem_map_pose = (pose[0], -pose[1], -pose[2])  # x, z, theta
 
-        xyz_points, sseg_points = project_pixels_to_world_coords(sseg_img, depth_img, sem_map_pose,
-                                                                 gap=2, FOV=90, cx=128, cy=128, resolution_x=256, resolution_y=256, ignored_classes=self.IGNORED_CLASS)
+        xyz_points, sseg_points = project_pixels_to_world_coords(
+            sseg_img, depth_img, sem_map_pose, gap=2, FOV=90, cx=128, cy=128, resolution_x=256, resolution_y=256,
+            ignored_classes=self.IGNORED_CLASS)
 
         mask_X = np.logical_and(xyz_points[0, :] > self.min_X,
                                 xyz_points[0, :] < self.max_X)
@@ -112,7 +101,6 @@ class SemanticMap:
                 self.max_z_coord)
 
             self.max_y_coord = max(np.max(y_coord), self.max_y_coord)
-            print(f'max_y_coord = {self.max_y_coord}')
 
         if step_ % self.step_size == 0:
             self.get_semantic_map(step_)
@@ -121,7 +109,6 @@ class SemanticMap:
         """ get the built semantic map. """
         smaller_four_dim_grid = self.four_dim_grid[self.min_z_coord:self.max_z_coord + 1, 0:self.THRESHOLD_HIGH,
                                                    self.min_x_coord:self.max_x_coord + 1, :]
-        print(f'smaller_four_dim_grid.shape = {smaller_four_dim_grid.shape}')
         # argmax over the category axis
         zyx_grid = np.argmax(smaller_four_dim_grid, axis=3)
         # swap y dim to the last axis
@@ -133,8 +120,6 @@ class SemanticMap:
         semantic_map = semantic_map.reshape(L, M)
         color_semantic_map = apply_color_to_map(semantic_map)
 
-        # plt.imshow(color_semantic_map)
-        # plt.show()
         if semantic_map.shape[0] > 0:
             save_sem_map_through_plt(
                 color_semantic_map,
