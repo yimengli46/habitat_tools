@@ -5,13 +5,13 @@ Hopefully, they will be helpful to other people.
 
 <img src='Figs/title.png'/>
 
-#### Implementation Progress Overview
+### Implementation Progress Overview
 | | Tools | Initial Code | Code Cleanup | Documentation|
 |--|--|--|--|--|
 |1 | demo: build a semantic map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 |2 | demo: build an occupancy map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 |3 | demo: get a panoramic view at given map coordinates
-|4 | get category to index mapping | :heavy_check_mark:
+|4 | get category to index mapping | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 |5 | demo: compute scene floor heights  | :heavy_check_mark:
 |6 | build maps with multiprocessing | :heavy_check_mark:
 |7 | build maps via point cloud | :heavy_check_mark:
@@ -20,7 +20,7 @@ Hopefully, they will be helpful to other people.
 |10 | demo: build a topological map | :heavy_check_mark:
 
 
-#### Dependencies
+### Dependencies
 We use `python==3.7`.  
 We recommend using a conda environment.  
 ```
@@ -50,7 +50,7 @@ sudo apt-get install -y --no-install-recommends \
 git checkout tags/v0.2.1
 python setup.py install --with-cuda
 ```
-#### Dataset Setup
+### Dataset Setup
 1. Download *scene* dataset of **Matterport3D(MP3D)** from [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here").      
 2. Upzip the scene data under `habitat-lab/data/scene_datasets/mp3d`.  
 3. You are also suggested to download *task* dataset of **PointGoal Navigation on MP3D** from [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here")  
@@ -75,7 +75,7 @@ habitat-lab/data
 ```
 
 
-#### 1 Demo: Build a Top-Down-View Semantic Map
+### 1 Demo: Build a Top-Down-View Semantic Map
 ```
 python demo_1_build_semantic_BEV_map.py
 ```
@@ -91,23 +91,30 @@ The demo outputs a currently maintained map after every 1000 steps.
 <img src='Figs/demo_1.png'/>   
 The built semantic map helps you view the entire scene and generate ObjectNav [[2]](#references) tasks yourself.
 
-#### 2 Demo: Build an Occupancy Map
+### 2 Demo: Build an Occupancy Map
 ```
-python demo_build_occupancy_map.py
+python demo_2_build_occupancy_map.py
 ```
 This demo builds an occupancy map of the target __scene__ at a specified __height__ (y value of the robot base).
 The occupancy map and the semantic map share the same width and height.
 The demo builds the occupancy map by,
 1. initialize a dense grid with a cell size equal to 5cm of the real-world environment.
 2. go through each cell and use `habitat_env.is_navigable()` to check if a cell is free.
-3. convert each cell's pose to the coordinates on the map and mark the corresponding map cell with a value of 1 (free) or 0 (occluded).
+3. convert each cell's pose to the coordinates on the map and mark the corresponding map cell with a value of `1` (free) or `0` (occluded).
 
 The demo outputs an occupancy map that looks like this.  
 <img src='Figs/demo_2.jpg'/> 
 
+### 4 Demo: Get a Mapping from Categories to Index  
+```
+python demo_4_get_cat2idx_mapping.py
+```
+This demo shows how to retrieve the mapping between the Matterport3D categories and indexes.
+```
+dict_cat2idx = {'void': 0, 'wall': 1, 'floor': 2, 'chair': 3, 'door': 4, 'table': 5, 'picture': 6, 'cabinet': 7, 'cushion': 8, 'window': 9, 'sofa': 10, 'bed': 11, 'curtain': 12, 'chest_of_drawers': 13, 'plant': 14, 'sink': 15, 'stairs': 16, 'ceiling': 17, 'toilet': 18, 'stool': 19, 'towel': 20, 'mirror': 21, 'tv_monitor': 22, 'shower': 23, 'column': 24, 'bathtub': 25, 'counter': 26, 'fireplace': 27, 'lighting': 28, 'beam': 29, 'railing': 30, 'shelving': 31, 'blinds': 32, 'gym_equipment': 33, 'seating': 34, 'board_panel': 35, 'furniture': 36, 'appliances': 37, 'clothes': 38, 'objects': 39, 'misc': 40}
+dict_idx2cat = {0: 'void', 1: 'wall', 2: 'floor', 3: 'chair', 4: 'door', 5: 'table', 6: 'picture', 7: 'cabinet', 8: 'cushion', 9: 'window', 10: 'sofa', 11: 'bed', 12: 'curtain', 13: 'chest_of_drawers', 14: 'plant', 15: 'sink', 16: 'stairs', 17: 'ceiling', 18: 'toilet', 19: 'stool', 20: 'towel', 21: 'mirror', 22: 'tv_monitor', 23: 'shower', 24: 'column', 25: 'bathtub', 26: 'counter', 27: 'fireplace', 28: 'lighting', 29: 'beam', 30: 'railing', 31: 'shelving', 32: 'blinds', 33: 'gym_equipment', 34: 'seating', 35: 'board_panel', 36: 'furniture', 37: 'appliances', 38: 'clothes', 39: 'objects', 40: 'misc'}
+```
 
-
-
-#### References
+### References
 [1] Savva, M., Kadian, A., Maksymets, O., Zhao, Y., Wijmans, E., Jain, B., ... & Batra, D. (2019). Habitat: A platform for embodied ai research. In Proceedings of the IEEE/CVF international conference on computer vision (pp. 9339-9347). [https://github.com/facebookresearch/habitat-lab](https://github.com/facebookresearch/habitat-lab)  
 [2] Ramakrishnan, S.K., Chaplot, D.S., Al-Halah, Z., Malik, J., & Grauman, K. (2022). PONI: Potential Functions for ObjectGoal Navigation with Interaction-free Learning. 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 18868-18878.
