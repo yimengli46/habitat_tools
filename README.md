@@ -9,17 +9,18 @@ Hopefully, they will be helpful to other people.
 | | Tools | Initial Code | Code Cleanup | Documentation|
 |--|--|--|--|--|
 |1 | demo: build a semantic map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
-|2 | demo: build an occupancy map  | :heavy_check_mark:
-|3 | demo: compute scene floor heights  | :heavy_check_mark:
-|4 | build maps with multiprocessing | :heavy_check_mark:
-|5 | get category to index mapping | :heavy_check_mark:
-|6 | build maps via point cloud | :heavy_check_mark:
-|7 | support for HM3D dataset   | :heavy_check_mark:
-|8 | frontier-based exploration | :heavy_check_mark:
-|9 | demo: build a topological map | :heavy_check_mark:
+|2 | demo: build an occupancy map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
+|3 | demo: get a panoramic view at given map coordinates
+|4 | get category to index mapping | :heavy_check_mark:
+|5 | demo: compute scene floor heights  | :heavy_check_mark:
+|6 | build maps with multiprocessing | :heavy_check_mark:
+|7 | build maps via point cloud | :heavy_check_mark:
+|8 | support for HM3D dataset   | :heavy_check_mark:
+|9 | frontier-based exploration | :heavy_check_mark:
+|10 | demo: build a topological map | :heavy_check_mark:
 
 
-## Dependencies
+#### Dependencies
 We use `python==3.7`.  
 We recommend using a conda environment.  
 ```
@@ -49,7 +50,7 @@ sudo apt-get install -y --no-install-recommends \
 git checkout tags/v0.2.1
 python setup.py install --with-cuda
 ```
-### Dataset Setup
+#### Dataset Setup
 1. Download *scene* dataset of **Matterport3D(MP3D)** from [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here").      
 2. Upzip the scene data under `habitat-lab/data/scene_datasets/mp3d`.  
 3. You are also suggested to download *task* dataset of **PointGoal Navigation on MP3D** from [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here")  
@@ -74,22 +75,39 @@ habitat-lab/data
 ```
 
 
-## 1 Demo: Build a Top-Down-View Semantic Map
+#### 1 Demo: Build a Top-Down-View Semantic Map
 ```
-python demo_build_semantic_BEV_map.py
+python demo_1_build_semantic_BEV_map.py
 ```
 This demo builds a top-down-view semantic map of the target __scene__ at a specified __height__ (y value of the robot base) by, 
-1. initialize a dense grid with a cell size equal to 5cm of the real-world environment.
-2. densely render observations (RGB, depth, and semantic segmentation) at each cell's location.
-3. project semantic segmentation pixels to a 3D point cloud using the depth map and robot pose.
-4. discretize the point cloud into a voxel grid and take the top-down view of the voxel grid
-5. the semantic map depends on the majority category of the points located at the top grid of each cell.  
+1. initialize a dense grid with a cell size equal to 30cm of the real-world environment.
+2. densely render observations (RGB, depth, and semantic segmentation) at each cell's location with eight viewpoint angles.
+3. initialize a grid map with cell size equal to 5cm of the real-world environment
+4. project semantic segmentation pixels to a 3D point cloud using the depth map and robot pose.
+5. discretize the point cloud into a voxel grid and take the top-down view of the voxel grid
+6. the semantic map depends on the majority category of the points located at the top grid of each cell.  
 
 The demo outputs a currently maintained map after every 1000 steps.   
 <img src='Figs/demo_1.png'/>   
 The built semantic map helps you view the entire scene and generate ObjectNav [[2]](#references) tasks yourself.
 
+#### 2 Demo: Build an Occupancy Map
+```
+python demo_build_occupancy_map.py
+```
+This demo builds an occupancy map of the target __scene__ at a specified __height__ (y value of the robot base).
+The occupancy map and the semantic map share the same width and height.
+The demo builds the occupancy map by,
+1. initialize a dense grid with a cell size equal to 5cm of the real-world environment.
+2. go through each cell and use `habitat_env.is_navigable()` to check if a cell is free.
+3. convert each cell's pose to the coordinates on the map and mark the corresponding map cell with a value of 1 (free) or 0 (occluded).
 
-## References
+The demo outputs an occupancy map that looks like this.  
+<img src='Figs/demo_2.jpg'/> 
+
+
+
+
+#### References
 [1] Savva, M., Kadian, A., Maksymets, O., Zhao, Y., Wijmans, E., Jain, B., ... & Batra, D. (2019). Habitat: A platform for embodied ai research. In Proceedings of the IEEE/CVF international conference on computer vision (pp. 9339-9347). [https://github.com/facebookresearch/habitat-lab](https://github.com/facebookresearch/habitat-lab)  
 [2] Ramakrishnan, S.K., Chaplot, D.S., Al-Halah, Z., Malik, J., & Grauman, K. (2022). PONI: Potential Functions for ObjectGoal Navigation with Interaction-free Learning. 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 18868-18878.
