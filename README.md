@@ -10,7 +10,7 @@ Hopefully, they will be helpful to other people.
 |--|--|--|--|--|
 |1 | demo: build a semantic map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 |2 | demo: build an occupancy map  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
-|3 | demo: get a panoramic view at given map coordinates| :heavy_check_mark: | :heavy_check_mark:
+|3 | demo: get a panoramic view at given map coordinates| :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 |4 | get category to index mapping | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
 |5 | demo: compute scene floor heights  | :heavy_check_mark:
 |6 | build maps with multiprocessing | :heavy_check_mark:
@@ -110,7 +110,7 @@ The demo outputs an occupancy map that looks like this.
 python demo_3_get_panorama_at_given_location.py
 ```
 With the built occupancy map, this demo renders a panorama at a given location (coordinates `(90, 45)` on the map).  
-<img src='Figs/demo_3.jpg'/>   
+<img src='Figs/demo_3.png'/>   
 The idea is to render four views at the given location and stitch the views to form the panorama.
 
 
