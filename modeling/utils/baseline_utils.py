@@ -209,7 +209,7 @@ def create_folder(folder_name, clean_up=False):
             os.system('rm {}/*.jpg'.format(folder_name))
 
 
-def read_map_npy(map_npy):
+def read_sem_map_npy(map_npy):
     """ read saved semantic map numpy file infomation."""
     min_x = map_npy['min_x']
     max_x = map_npy['max_x']
@@ -222,8 +222,12 @@ def read_map_npy(map_npy):
     W = map_npy['W']
     H = map_npy['H']
     semantic_map = map_npy['semantic_map']
-    return semantic_map, (min_X, min_Z, max_X, max_Z), (min_x, min_z, max_x,
-                                                        max_z), (W, H)
+    map_data = {}
+    map_data['semantic_map'] = semantic_map
+    map_data['pose_range'] = (min_X, min_Z, max_X, max_Z)
+    map_data['coords_range'] = (min_x, min_z, max_x, max_z)
+    map_data['wh'] = (W, H)
+    return map_data
 
 
 def read_occ_map_npy(map_npy):
@@ -239,8 +243,12 @@ def read_occ_map_npy(map_npy):
     occ_map = map_npy['occupancy']
     W = map_npy['W']
     H = map_npy['H']
-    return occ_map, (min_X, min_Z, max_X, max_Z), (min_x, min_z, max_x,
-                                                   max_z), (W, H)
+    map_data = {}
+    map_data['occupancy_map'] = occ_map
+    map_data['pose_range'] = (min_X, min_Z, max_X, max_Z)
+    map_data['coords_range'] = (min_x, min_z, max_x, max_z)
+    map_data['wh'] = (W, H)
+    return map_data
 
 
 def get_class_mapper(dataset='gibson'):
@@ -257,14 +265,16 @@ def get_class_mapper(dataset='gibson'):
     return class_dict
 
 
-def pxl_coords_to_map_pose(coords,
-                           pose_range,
-                           coords_range,
-                           wh,
-                           cell_size=cfg.SEM_MAP.CELL_SIZE,
-                           flag_cropped=True):
+def coords_to_pose(coords,
+                   map_data,
+                   cell_size=cfg.SEM_MAP.CELL_SIZE,
+                   flag_cropped=True):
     """convert cell location 'coords' on the map to pose (X, Z) in the habitat environment"""
-    x, y = coords
+    x, y = coords[:2]
+
+    pose_range = map_data['pose_range']
+    coords_range = map_data['coords_range']
+    wh = map_data['wh']
     min_X, min_Z, max_X, max_Z = pose_range
     min_x, min_z, max_x, max_z = coords_range
 
@@ -274,19 +284,28 @@ def pxl_coords_to_map_pose(coords,
     else:
         X = (x + cell_size / 2) * cell_size + min_X
         Z = (wh[0] - (y + cell_size / 2)) * cell_size + min_Z
-    return (X, Z)
+
+    if len(coords) == 3:
+        map_yaw = coords[2]
+        yaw = -map_yaw
+        return (X, Z, yaw)
+    else:
+        return (X, Z)
 
 
-def map_pose_to_coords(cur_pose,
-                       pose_range,
-                       coords_range,
-                       wh,
-                       cell_size=cfg.SEM_MAP.CELL_SIZE,
-                       flag_cropped=True):
+def pose_to_coords(cur_pose,
+                   map_data,
+                   cell_size=cfg.SEM_MAP.CELL_SIZE,
+                   flag_cropped=True):
     """
     convert pose (X, Z) in the habitat environment to the cell location 'coords' on the map.
     """
     tx, tz = cur_pose[:2]
+    tz = -tz
+
+    pose_range = map_data['pose_range']
+    coords_range = map_data['coords_range']
+    wh = map_data['wh']
 
     if flag_cropped:
         x_coord = floor((tx - pose_range[0]) / cell_size - coords_range[0])
@@ -296,7 +315,12 @@ def map_pose_to_coords(cur_pose,
         x_coord = floor((tx - pose_range[0]) / cell_size)
         z_coord = floor(wh[0] - (tz - pose_range[1]) / cell_size)
 
-    return (x_coord, z_coord)
+    if len(cur_pose) == 3:
+        yaw = cur_pose[2]
+        map_yaw = -yaw
+        return (x_coord, z_coord, map_yaw)
+    else:
+        return (x_coord, z_coord)
 
 
 def save_sem_map_through_plt(img, name):

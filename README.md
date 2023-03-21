@@ -9,9 +9,9 @@ Hopefully, they will be helpful to other people.
 | | Tools | Initial Code | Code Cleanup | Documentation|
 |--|--|--|--|--|
 |1 | demo: build a semantic map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
-|2 | demo: build an occupancy map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
-|3 | demo: get a panoramic view at given map coordinates
-|4 | get category to index mapping | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
+|2 | demo: build an occupancy map  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
+|3 | demo: get a panoramic view at given map coordinates| :heavy_check_mark: | :heavy_check_mark:
+|4 | get category to index mapping | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
 |5 | demo: compute scene floor heights  | :heavy_check_mark:
 |6 | build maps with multiprocessing | :heavy_check_mark:
 |7 | build maps via point cloud | :heavy_check_mark:
@@ -95,15 +95,24 @@ The built semantic map helps you view the entire scene and generate ObjectNav [[
 ```
 python demo_2_build_occupancy_map.py
 ```
-This demo builds an occupancy map of the target __scene__ at a specified __height__ (y value of the robot base).
-The occupancy map and the semantic map share the same width and height.
-The demo builds the occupancy map by,
+This demo builds an occupancy map of the target __scene__ at a specified __height__ (y value of the robot base) on the top of the pre-built semantic map.  
+The occupancy map and the semantic map share the same width and height.  
+The demo builds the occupancy map by,  
 1. initialize a dense grid with a cell size equal to 5cm of the real-world environment.
 2. go through each cell and use `habitat_env.is_navigable()` to check if a cell is free.
 3. convert each cell's pose to the coordinates on the map and mark the corresponding map cell with a value of `1` (free) or `0` (occluded).
 
 The demo outputs an occupancy map that looks like this.  
 <img src='Figs/demo_2.jpg'/> 
+
+### 3 Demo: Get a Panorama at a Given Location
+```
+python demo_3_get_panorama_at_given_location.py
+```
+With the built occupancy map, this demo renders a panorama at a given location (coordinates `(90, 45)` on the map).  
+<img src='Figs/demo_3.jpg'/>   
+The idea is to render four views at the given location and stitch the views to form the panorama.
+
 
 ### 4 Demo: Get a Mapping from Categories to Index  
 ```

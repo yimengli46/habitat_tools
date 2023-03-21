@@ -1,5 +1,5 @@
 import numpy as np
-from modeling.utils.baseline_utils import read_map_npy, map_pose_to_coords, save_occ_map_through_plt
+from modeling.utils.baseline_utils import read_sem_map_npy, pose_to_coords, save_occ_map_through_plt
 import habitat
 from core import cfg
 
@@ -7,7 +7,7 @@ from core import cfg
 scene = '2t7WUuJeko7'
 height = 0.16325
 
-semantic_map_folder = f'output/semantic_map/'
+semantic_map_folder = 'output/semantic_map'
 
 # after testing, using 8 angles is most efficient
 theta_lst = [0]
@@ -30,15 +30,17 @@ config.freeze()
 env = habitat.sims.make_sim(config.SIMULATOR.TYPE, config=config.SIMULATOR)
 env.reset()
 
-# ============================= traverse the environment =========================================
+# load the pre-built semantic map
 sem_map_npy = np.load(
     f'{semantic_map_folder}/{scene}/BEV_semantic_map.npy', allow_pickle=True).item()
-_, pose_range, coords_range, wh = read_map_npy(sem_map_npy)
+map_data = read_sem_map_npy(sem_map_npy)
 
+# initialize the occupancy grid
 occ_map = np.zeros((grid_H, grid_W), dtype=int)
 
+# ============================= traverse the environment =========================================
 count_ = 0
-# ========================= generate observations ===========================
+
 for grid_z in range(grid_H):
     for grid_x in range(grid_W):
 
@@ -53,11 +55,14 @@ for grid_z in range(grid_H):
             x = xv[grid_z, grid_x] + cell_size / 2.
             z = zv[grid_z, grid_x] + cell_size / 2.
             # convert environment pose to map coordinates
-            z = -z
-            x_coord, z_coord = map_pose_to_coords(
-                (x, z), pose_range, coords_range, wh, flag_cropped=False)
+            x_coord, z_coord = pose_to_coords(
+                (x, z), map_data, flag_cropped=False)
             occ_map[z_coord, x_coord] = 1
 
+# cut occupancy map and make it same size as the semantic map
+coords_range = map_data['coords_range']
+pose_range = map_data['pose_range']
+wh = map_data['wh']
 occ_map = occ_map[coords_range[1]:coords_range[3] +
                   1, coords_range[0]:coords_range[2] + 1]
 
