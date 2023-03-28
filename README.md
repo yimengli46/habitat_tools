@@ -1,4 +1,8 @@
 # habitat-tools
+[Yimeng Li](https://yimengli46.github.io/) \
+George Mason University
+
+### Abstract
 This repository provides a minimal set of tools for working with the Habitat environment [[1]](#references) in Python.   
 I built these tools when working on research with the Habitat environment.   
 Hopefully, they will be helpful to other people.  
@@ -122,6 +126,27 @@ This demo shows how to retrieve the mapping between the Matterport3D categories 
 ```
 dict_cat2idx = {'void': 0, 'wall': 1, 'floor': 2, 'chair': 3, 'door': 4, 'table': 5, 'picture': 6, 'cabinet': 7, 'cushion': 8, 'window': 9, 'sofa': 10, 'bed': 11, 'curtain': 12, 'chest_of_drawers': 13, 'plant': 14, 'sink': 15, 'stairs': 16, 'ceiling': 17, 'toilet': 18, 'stool': 19, 'towel': 20, 'mirror': 21, 'tv_monitor': 22, 'shower': 23, 'column': 24, 'bathtub': 25, 'counter': 26, 'fireplace': 27, 'lighting': 28, 'beam': 29, 'railing': 30, 'shelving': 31, 'blinds': 32, 'gym_equipment': 33, 'seating': 34, 'board_panel': 35, 'furniture': 36, 'appliances': 37, 'clothes': 38, 'objects': 39, 'misc': 40}
 dict_idx2cat = {0: 'void', 1: 'wall', 2: 'floor', 3: 'chair', 4: 'door', 5: 'table', 6: 'picture', 7: 'cabinet', 8: 'cushion', 9: 'window', 10: 'sofa', 11: 'bed', 12: 'curtain', 13: 'chest_of_drawers', 14: 'plant', 15: 'sink', 16: 'stairs', 17: 'ceiling', 18: 'toilet', 19: 'stool', 20: 'towel', 21: 'mirror', 22: 'tv_monitor', 23: 'shower', 24: 'column', 25: 'bathtub', 26: 'counter', 27: 'fireplace', 28: 'lighting', 29: 'beam', 30: 'railing', 31: 'shelving', 32: 'blinds', 33: 'gym_equipment', 34: 'seating', 35: 'board_panel', 36: 'furniture', 37: 'appliances', 38: 'clothes', 39: 'objects', 40: 'misc'}
+```
+
+### Citing
+I developed this repo while I worked on the following papers.
+If you find this code useful, please consider citing them.
+```
+@inproceedings{li2022comparison,
+  title={Comparison of Model Free and Model-Based Learning-Informed Planning for PointGoal Navigation},
+  author={Yimeng Li and Arnab Debnath and Gregory J. Stein and Jana Kosecka},
+  booktitle={CoRL 2022 Workshop on Learning, Perception, and Abstraction for Long-Horizon Planning},
+  year={2022},
+  url={https://openreview.net/forum?id=2s92OhjT4L}
+}
+
+@article{Li2022LearningAugmentedMP,
+  title={Learning-Augmented Model-Based Planning for Visual Exploration},
+  author={Yimeng Li and Arnab Debnath and Gregory J. Stein and Jana Kosecka},
+  journal={ArXiv},
+  year={2022},
+  volume={abs/2211.07898}
+}
 ```
 
 ### References
