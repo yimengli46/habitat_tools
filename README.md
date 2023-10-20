@@ -12,12 +12,12 @@ Hopefully, they will be helpful to other people.
 ### Implementation Progress Overview
 | | Tools | Initial Code | Code Cleanup | Documentation|
 |--|--|--|--|--|
-|1 | demo1: build a semantic map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
-|2 | demo2: build an occupancy map  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
-|3 | demo3: get a panoramic view at given map coordinates| :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
+|1 | demo: build a semantic map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
+|2 | demo: build an occupancy map  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
+|3 | demo: get a panoramic view at given map coordinates| :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 |4 | code: get category to index mapping | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
-|5 | demo4: build semantic map at any height via cutting the point cloud | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
-|6 | demo5: build a topological map| :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
+|5 | demo: build semantic map at any height via cutting the point cloud | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
+|6 | demo: build a topological map| :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 
 ### Dependencies
 We use `python==3.7`.  
@@ -74,7 +74,7 @@ habitat-lab/data
 ```
 
 
-### 1 Demo: Build a Top-Down-View Semantic Map
+### 1. Demo: Build a Top-Down-View Semantic Map
 ```
 python demo_1_build_semantic_BEV_map.py
 ```
@@ -90,7 +90,7 @@ The demo outputs a currently maintained map after every 1000 steps.
 <img src='Figs/demo_1.png'/>   
 The built semantic map helps you view the entire scene and generate ObjectNav [[2]](#references) tasks yourself.
 
-### 2 Demo: Build an Occupancy Map
+### 2. Demo: Build an Occupancy Map
 ```
 python demo_2_build_occupancy_map.py
 ```
@@ -104,7 +104,7 @@ The demo builds the occupancy map by,
 The demo outputs an occupancy map that looks like this.  
 <img src='Figs/demo_2.jpg'/> 
 
-### 3 Demo: Get a Panorama at a Given Location
+### 3. Demo: Get a Panorama at a Given Location
 ```
 python demo_3_get_panorama_at_given_location.py
 ```
@@ -113,7 +113,7 @@ With the built occupancy map, this demo renders a panorama at a given location (
 The idea is to render four views at the given location and stitch the views to form the panorama.
 
 
-### 4 Code: Get a Mapping from Categories to Index  
+### 4. Code: Get a Mapping from Categories to Index  
 ```
 python demo_4_get_cat2idx_mapping.py
 ```
@@ -123,7 +123,7 @@ dict_cat2idx = {'void': 0, 'wall': 1, 'floor': 2, 'chair': 3, 'door': 4, 'table'
 dict_idx2cat = {0: 'void', 1: 'wall', 2: 'floor', 3: 'chair', 4: 'door', 5: 'table', 6: 'picture', 7: 'cabinet', 8: 'cushion', 9: 'window', 10: 'sofa', 11: 'bed', 12: 'curtain', 13: 'chest_of_drawers', 14: 'plant', 15: 'sink', 16: 'stairs', 17: 'ceiling', 18: 'toilet', 19: 'stool', 20: 'towel', 21: 'mirror', 22: 'tv_monitor', 23: 'shower', 24: 'column', 25: 'bathtub', 26: 'counter', 27: 'fireplace', 28: 'lighting', 29: 'beam', 30: 'railing', 31: 'shelving', 32: 'blinds', 33: 'gym_equipment', 34: 'seating', 35: 'board_panel', 36: 'furniture', 37: 'appliances', 38: 'clothes', 39: 'objects', 40: 'misc'}
 ```
 
-### 5 Demo: Build a Semantic Map at any Height via Cutting the Point Cloud
+### 5. Demo: Build a Semantic Map at any Height via Cutting the Point Cloud
 In each episode of the navigation tasks, be it PointGoal, ObjectGoal, or Vision-Language-Navigation (VLN), the robot starts at a particular height within a specific environment.  
 Building a semantic map for the same environment but at different heights would be redundant.  
 To streamline this process, we adopt a more efficient approach by cutting the point cloud to construct a semantic map online according to the episode's height.  
@@ -157,7 +157,7 @@ The white circles denote the waypoints.
 
 <img src='Figs/demo_5.png' width="700" height="800"/>  
 
-### 6 Demo: Build an Topological Map
+### 6. Demo: Build an Topological Map
 ```
 python demo_6_build_topological_map.py
 ```
