@@ -165,7 +165,7 @@ This demo builds a topological map of the target __scene__ at a specified __heig
 1. Find the largest connected component of the environment
 2. Compute skeleton on the largest connected component (so there is no dangling node that is not reachable to any other nodes.)
 3. Remove skeleton nodes near each other. 
-<img src='Figs/demo_6.jpg'/> 
+<img src='Figs/demo_6.png'/> 
 
 ### Citing
 I developed this repo while I worked on the following papers.
