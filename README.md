@@ -4,7 +4,7 @@ George Mason University
 
 ### Abstract
 This repository provides a minimal set of tools for working with the Habitat environment [[1]](#references) in Python.   
-I built these tools when working on research with the Habitat environment.   
+I built these tools when working with the Habitat environment.   
 Hopefully, they will be helpful to other people.  
 
 <img src='Figs/title.png'/>
@@ -15,13 +15,13 @@ Hopefully, they will be helpful to other people.
 |1 | demo: build a semantic map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 |2 | demo: build an occupancy map  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
 |3 | demo: get a panoramic view at given map coordinates| :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
-|4 | get category to index mapping | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
-|5 | demo: compute scene floor heights  | :heavy_check_mark:
-|6 | build maps with multiprocessing | :heavy_check_mark:
-|7 | build maps via point cloud | :heavy_check_mark:
+|4 | code: get category to index mapping | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
+|5 | demo: build semantic map at any height via cutting the point cloud | :heavy_check_mark:
+|6 | demo: build a topological map via skeleton | :heavy_check_mark:
+|7 | demo: build a topological map via dense sampling | :heavy_check_mark:
 |8 | support for HM3D dataset   | :heavy_check_mark:
 |9 | frontier-based exploration | :heavy_check_mark:
-|10 | demo: build a topological map | :heavy_check_mark:
+
 
 
 ### Dependencies
@@ -71,7 +71,7 @@ habitat-lab/data
                                         /train
                                         /val
                                         /test
-                scene_datasets/mp3d
+                /scene_datasets/mp3d
                                     /1LXtFkjw3qL
                                     /1pXnuDYAj8r
                                     /....
@@ -118,7 +118,7 @@ With the built occupancy map, this demo renders a panorama at a given location (
 The idea is to render four views at the given location and stitch the views to form the panorama.
 
 
-### 4 Demo: Get a Mapping from Categories to Index  
+### 4 Code: Get a Mapping from Categories to Index  
 ```
 python demo_4_get_cat2idx_mapping.py
 ```
@@ -127,6 +127,38 @@ This demo shows how to retrieve the mapping between the Matterport3D categories 
 dict_cat2idx = {'void': 0, 'wall': 1, 'floor': 2, 'chair': 3, 'door': 4, 'table': 5, 'picture': 6, 'cabinet': 7, 'cushion': 8, 'window': 9, 'sofa': 10, 'bed': 11, 'curtain': 12, 'chest_of_drawers': 13, 'plant': 14, 'sink': 15, 'stairs': 16, 'ceiling': 17, 'toilet': 18, 'stool': 19, 'towel': 20, 'mirror': 21, 'tv_monitor': 22, 'shower': 23, 'column': 24, 'bathtub': 25, 'counter': 26, 'fireplace': 27, 'lighting': 28, 'beam': 29, 'railing': 30, 'shelving': 31, 'blinds': 32, 'gym_equipment': 33, 'seating': 34, 'board_panel': 35, 'furniture': 36, 'appliances': 37, 'clothes': 38, 'objects': 39, 'misc': 40}
 dict_idx2cat = {0: 'void', 1: 'wall', 2: 'floor', 3: 'chair', 4: 'door', 5: 'table', 6: 'picture', 7: 'cabinet', 8: 'cushion', 9: 'window', 10: 'sofa', 11: 'bed', 12: 'curtain', 13: 'chest_of_drawers', 14: 'plant', 15: 'sink', 16: 'stairs', 17: 'ceiling', 18: 'toilet', 19: 'stool', 20: 'towel', 21: 'mirror', 22: 'tv_monitor', 23: 'shower', 24: 'column', 25: 'bathtub', 26: 'counter', 27: 'fireplace', 28: 'lighting', 29: 'beam', 30: 'railing', 31: 'shelving', 32: 'blinds', 33: 'gym_equipment', 34: 'seating', 35: 'board_panel', 36: 'furniture', 37: 'appliances', 38: 'clothes', 39: 'objects', 40: 'misc'}
 ```
+
+### 5 Demo: Build a Semantic Map at any Height via Cutting the Point Cloud
+Each episode of either the PointGoal navigation or ObjectGoal navigation or Vision-Language-Navigation(VLN) task the robot starts at a specific height in a certain environment.
+Building a semantic map for the same environment but at different heights seems a waste of time.
+The more efficient way is to cut the point cloud to build the semantic map online given the episode height.
+Let's take the VLN task as an example.
+#### Dataset Setup
+1. Download *task* dataset of **VLN on MP3D** from [here](https://dl.fbaipublicfiles.com/habitat/data/datasets/vln/mp3d/r2r/v1/vln_r2r_mp3d_v1.zip "here")
+2. Unzip the episode data under `habitat-lab/data/datasets/vln_r2r_mp3d_v1`.
+
+You can collect the point cloud by traversing an environment or you can download it from [here](https://drive.google.com/file/d/1u4SKEYs4L5RnyXrIX-faXGU1jc16CTkJ/view, "here"), which is pre-collected by [[3]](#references).  
+3. After you download the point cloud, unzip and put it under `habitat-lab/data/other_datasets/mp3d_scene_pclouds`.  
+The code requires the datasets in data folder in the following format:  
+```
+habitat-lab/data
+                /datasets/pointnav
+                /datasets/vln_r2r_mp3d_v1
+                                         /train
+                                         /val_seen
+                                         /val_unseen
+                /scene_datasets/mp3d
+                                    /1LXtFkjw3qL_color.npz
+                                    /1LXtFkjw3qL_pcloud.npz
+                                    /1pXnuDYAj8r_color.npz
+                                    /1pXnuDYAj8r_pcloud.npz                 
+```
+```
+python demo_5_build_semantic_map_via_point_cloud.py
+```
+This demo build at a semantic map at the height specified in the VLN episode.  
+The white circles denote the waypoints.
+<img src='Figs/demo_5.png'/>   
 
 ### Citing
 I developed this repo while I worked on the following papers.
@@ -143,12 +175,12 @@ If you find this code useful, please consider citing them.
 @article{Li2022LearningAugmentedMP,
   title={Learning-Augmented Model-Based Planning for Visual Exploration},
   author={Yimeng Li and Arnab Debnath and Gregory J. Stein and Jana Kosecka},
-  journal={ArXiv},
-  year={2022},
-  volume={abs/2211.07898}
+  booktitle={IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  year={2023}
 }
 ```
 
 ### References
 [1] Savva, M., Kadian, A., Maksymets, O., Zhao, Y., Wijmans, E., Jain, B., ... & Batra, D. (2019). Habitat: A platform for embodied ai research. In Proceedings of the IEEE/CVF international conference on computer vision (pp. 9339-9347). [https://github.com/facebookresearch/habitat-lab](https://github.com/facebookresearch/habitat-lab)  
 [2] Ramakrishnan, S.K., Chaplot, D.S., Al-Halah, Z., Malik, J., & Grauman, K. (2022). PONI: Potential Functions for ObjectGoal Navigation with Interaction-free Learning. 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 18868-18878.
+[3] Georgakis, G., Schmeckpeper, K., Wanchoo, K., Dan, S., Miltsakaki, E., Roth, D., & Daniilidis, K. (2022). Cross-modal map learning for vision and language navigation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 15460-15470). [https://github.com/ggeorgak11/CM2](https://github.com/ggeorgak11/CM2)
