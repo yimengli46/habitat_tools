@@ -16,11 +16,10 @@ Hopefully, they will be helpful to other people.
 |2 | demo: build an occupancy map  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
 |3 | demo: get a panoramic view at given map coordinates| :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 |4 | code: get category to index mapping | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
-|5 | demo: build semantic map at any height via cutting the point cloud | :heavy_check_mark:
+|5 | demo: build semantic map at any height via cutting the point cloud | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 |6 | demo: build a topological map via skeleton | :heavy_check_mark:
 |7 | demo: build a topological map via dense sampling | :heavy_check_mark:
-|8 | support for HM3D dataset   | :heavy_check_mark:
-|9 | frontier-based exploration | :heavy_check_mark:
+
 
 
 
@@ -31,7 +30,7 @@ We recommend using a conda environment.
 conda create --name habitat_py37 python=3.7
 source activate habitat_py37
 ```
-You can install Habitat-Lab and Habitat-Sim following instructions from [here](https://github.com/facebookresearch/habitat-lab "here").  
+You can install Habitat-Lab and Habitat-Sim following instructions [here](https://github.com/facebookresearch/habitat-lab "here").  
 We recommend installing Habitat-Lab and Habitat-Sim from the source code.  
 We use `habitat==0.2.1` and `habitat_sim==0.2.1`.  
 Use the following commands to set it up:  
@@ -55,9 +54,9 @@ git checkout tags/v0.2.1
 python setup.py install --with-cuda
 ```
 ### Dataset Setup
-1. Download *scene* dataset of **Matterport3D(MP3D)** from [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here").      
+1. Download *scene* dataset of **Matterport3D(MP3D)** [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here").      
 2. Upzip the scene data under `habitat-lab/data/scene_datasets/mp3d`.  
-3. You are also suggested to download *task* dataset of **PointGoal Navigation on MP3D** from [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here")  
+3. You are also suggested to download *task* dataset of **PointGoal Navigation on MP3D** [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here")  
 4. Unzip the episode data under `habitat-lab/data/datasets/pointnav/mp3d`.  
 5. Create soft links to the data. 
 ```
@@ -129,17 +128,17 @@ dict_idx2cat = {0: 'void', 1: 'wall', 2: 'floor', 3: 'chair', 4: 'door', 5: 'tab
 ```
 
 ### 5 Demo: Build a Semantic Map at any Height via Cutting the Point Cloud
-Each episode of either the PointGoal navigation or ObjectGoal navigation or Vision-Language-Navigation(VLN) task the robot starts at a specific height in a certain environment.
-Building a semantic map for the same environment but at different heights seems a waste of time.
-The more efficient way is to cut the point cloud to build the semantic map online given the episode height.
-Let's take the VLN task as an example.
+In each episode of the navigation tasks, be it PointGoal, ObjectGoal, or Vision-Language-Navigation (VLN), the robot starts at a particular height within a specific environment.  
+Building a semantic map for the same environment but at different heights would be redundant.  
+To streamline this process, we adopt a more efficient approach by cutting the point cloud to construct a semantic map online according to the episode's height.  
+In this demo, let's use the VLN task as an example.  
 #### Dataset Setup
-1. Download *task* dataset of **VLN on MP3D** from [here](https://dl.fbaipublicfiles.com/habitat/data/datasets/vln/mp3d/r2r/v1/vln_r2r_mp3d_v1.zip "here")
-2. Unzip the episode data under `habitat-lab/data/datasets/vln_r2r_mp3d_v1`.
+1. Download *task* dataset of **VLN on MP3D** [here](https://dl.fbaipublicfiles.com/habitat/data/datasets/vln/mp3d/r2r/v1/vln_r2r_mp3d_v1.zip "here")
+2. Unzip the episode data and put it under `habitat-lab/data/datasets/vln_r2r_mp3d_v1`.
 
-You can collect the point cloud by traversing an environment or you can download it from [here](https://drive.google.com/file/d/1u4SKEYs4L5RnyXrIX-faXGU1jc16CTkJ/view, "here"), which is pre-collected by [[3]](#references).  
+You can collect the point cloud by traversing an environment or you can download it [here](https://drive.google.com/file/d/1u4SKEYs4L5RnyXrIX-faXGU1jc16CTkJ/view, "here"), which is pre-collected by [[3]](#references).  
 3. After you download the point cloud, unzip and put it under `habitat-lab/data/other_datasets/mp3d_scene_pclouds`.  
-The code requires the datasets in data folder in the following format:  
+The code requires the datasets in the data folder in the following format:  
 ```
 habitat-lab/data
                 /datasets/pointnav
@@ -147,18 +146,20 @@ habitat-lab/data
                                          /train
                                          /val_seen
                                          /val_unseen
-                /scene_datasets/mp3d
-                                    /1LXtFkjw3qL_color.npz
-                                    /1LXtFkjw3qL_pcloud.npz
-                                    /1pXnuDYAj8r_color.npz
-                                    /1pXnuDYAj8r_pcloud.npz                 
+                /other_datasets/mp3d_scene_pclouds
+                                                  /1LXtFkjw3qL_color.npz
+                                                  /1LXtFkjw3qL_pcloud.npz
+                                                  /1pXnuDYAj8r_color.npz
+                                                  /1pXnuDYAj8r_pcloud.npz                 
 ```
+To run the demo
 ```
 python demo_5_build_semantic_map_via_point_cloud.py
 ```
-This demo build at a semantic map at the height specified in the VLN episode.  
+This demo build at a semantic map at the height `y` at a environment specified in a VLN episode.  
 The white circles denote the waypoints.
-<img src='Figs/demo_5.png'/>   
+
+<img src='Figs/demo_5.png' width="700" height="800"/>   
 
 ### Citing
 I developed this repo while I worked on the following papers.
@@ -182,5 +183,5 @@ If you find this code useful, please consider citing them.
 
 ### References
 [1] Savva, M., Kadian, A., Maksymets, O., Zhao, Y., Wijmans, E., Jain, B., ... & Batra, D. (2019). Habitat: A platform for embodied ai research. In Proceedings of the IEEE/CVF international conference on computer vision (pp. 9339-9347). [https://github.com/facebookresearch/habitat-lab](https://github.com/facebookresearch/habitat-lab)  
-[2] Ramakrishnan, S.K., Chaplot, D.S., Al-Halah, Z., Malik, J., & Grauman, K. (2022). PONI: Potential Functions for ObjectGoal Navigation with Interaction-free Learning. 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 18868-18878.
+[2] Ramakrishnan, S.K., Chaplot, D.S., Al-Halah, Z., Malik, J., & Grauman, K. (2022). PONI: Potential Functions for ObjectGoal Navigation with Interaction-free Learning. 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 18868-18878.  
 [3] Georgakis, G., Schmeckpeper, K., Wanchoo, K., Dan, S., Miltsakaki, E., Roth, D., & Daniilidis, K. (2022). Cross-modal map learning for vision and language navigation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 15460-15470). [https://github.com/ggeorgak11/CM2](https://github.com/ggeorgak11/CM2)
