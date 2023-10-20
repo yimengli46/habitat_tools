@@ -12,16 +12,12 @@ Hopefully, they will be helpful to other people.
 ### Implementation Progress Overview
 | | Tools | Initial Code | Code Cleanup | Documentation|
 |--|--|--|--|--|
-|1 | demo: build a semantic map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
-|2 | demo: build an occupancy map  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
-|3 | demo: get a panoramic view at given map coordinates| :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
+|1 | demo1: build a semantic map  | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
+|2 | demo2: build an occupancy map  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
+|3 | demo3: get a panoramic view at given map coordinates| :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 |4 | code: get category to index mapping | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
-|5 | demo: build semantic map at any height via cutting the point cloud | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
-|6 | demo: build a topological map via skeleton | :heavy_check_mark:
-|7 | demo: build a topological map via dense sampling | :heavy_check_mark:
-
-
-
+|5 | demo4: build semantic map at any height via cutting the point cloud | :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
+|6 | demo5: build a topological map| :heavy_check_mark: | :heavy_check_mark: |:heavy_check_mark:
 
 ### Dependencies
 We use `python==3.7`.  
@@ -133,10 +129,10 @@ Building a semantic map for the same environment but at different heights would 
 To streamline this process, we adopt a more efficient approach by cutting the point cloud to construct a semantic map online according to the episode's height.  
 In this demo, let's use the VLN task as an example.  
 #### Dataset Setup
-1. Download *task* dataset of **VLN on MP3D** [here](https://dl.fbaipublicfiles.com/habitat/data/datasets/vln/mp3d/r2r/v1/vln_r2r_mp3d_v1.zip "here")
+1. Download *task* dataset of **VLN on MP3D** [here](https://dl.fbaipublicfiles.com/habitat/data/datasets/vln/mp3d/r2r/v1/vln_r2r_mp3d_v1.zip "here").
 2. Unzip the episode data and put it under `habitat-lab/data/datasets/vln_r2r_mp3d_v1`.
 
-You can collect the point cloud by traversing an environment or you can download it [here](https://drive.google.com/file/d/1u4SKEYs4L5RnyXrIX-faXGU1jc16CTkJ/view, "here"), which is pre-collected by [[3]](#references).  
+You can obtain the point cloud data by either exploring the environment yourself or by downloading a pre-collected dataset, as provided by [here](https://drive.google.com/file/d/1u4SKEYs4L5RnyXrIX-faXGU1jc16CTkJ/view, "here"), which is pre-collected by [[3]].(#references).  
 3. After you download the point cloud, unzip and put it under `habitat-lab/data/other_datasets/mp3d_scene_pclouds`.  
 The code requires the datasets in the data folder in the following format:  
 ```
@@ -156,10 +152,20 @@ To run the demo
 ```
 python demo_5_build_semantic_map_via_point_cloud.py
 ```
-This demo build at a semantic map at the height `y` at a environment specified in a VLN episode.  
+This demo builds a semantic map at the height of `y` at an environment specified in a VLN episode.  
 The white circles denote the waypoints.
 
-<img src='Figs/demo_5.png' width="700" height="800"/>   
+<img src='Figs/demo_5.png' width="700" height="800"/>  
+
+### 6 Demo: Build an Topological Map
+```
+python demo_6_build_topological_map.py
+```
+This demo builds a topological map of the target __scene__ at a specified __height__ (y value of the robot base) on top of the pre-built semantic and occupancy map.  
+1. Find the largest connected component of the environment
+2. Compute skeleton on the largest connected component (so there is no dangling node that is not reachable to any other nodes.)
+3. Remove skeleton nodes near each other. 
+<img src='Figs/demo_6.jpg'/> 
 
 ### Citing
 I developed this repo while I worked on the following papers.

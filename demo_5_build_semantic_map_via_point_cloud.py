@@ -2,10 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import json
 import gzip
-from math import floor
 from modeling.utils.build_map_utils import find_first_nonzero_elem_per_row
-from modeling.utils.constants import d3_41_colors_rgb
-from modeling.utils.baseline_utils import apply_color_to_map, pose_to_coords, coords_to_pose
+from modeling.utils.baseline_utils import apply_color_to_map, pose_to_coords
 
 
 def build_semantic_map_via_point_cloud(x, y, z, label_seq, height):
