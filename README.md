@@ -1,11 +1,9 @@
 # habitat-tools
-[Yimeng Li](https://yimengli46.github.io/) \
-George Mason University
-
-### Abstract
-This repository provides a minimal set of tools for working with the Habitat environment [[1]](#references) in Python.   
-I built these tools when working with the Habitat environment.   
-Hopefully, they will be helpful to other people.  
+This repository offers a concise collection of Python code snippets tailored for use with the Habitat environment [[1]](#references).         
+I wrote these snippets during my exploration of the Habitat environment.         
+The included code covers various functionalities, such as constructing semantic maps, occupancy maps, or topological maps within a Matterport environment.        
+Additionally, you can utilize the Habitat simulator to obtain panoramic views from any specified location.        
+My aim is for these snippets to serve as a valuable resource for others exploring the Habitat environment.       
 
 <img src='Figs/title.png'/>
 
@@ -50,27 +48,26 @@ git checkout tags/v0.2.1
 python setup.py install --with-cuda
 ```
 ### Dataset Setup
-1. Download *scene* dataset of **Matterport3D(MP3D)** [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here").      
-2. Upzip the scene data under `habitat-lab/data/scene_datasets/mp3d`.  
-3. You are also suggested to download *task* dataset of **PointGoal Navigation on MP3D** [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here")  
-4. Unzip the episode data under `habitat-lab/data/datasets/pointnav/mp3d`.  
-5. Create soft links to the data. 
+Download *scene* dataset of **Matterport3D(MP3D)** from [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here").      
+Upzip the scene data and put it under `habitat-lab/data/scene_datasets/mp3d`.  
+You are also suggested to download *task* dataset of **Point goal Navigation on MP3D** from [here](https://github.com/facebookresearch/habitat-lab/blob/main/DATASETS.md "here")  
+Unzip the episode data and put it under `habitat-lab/data/datasets/pointnav/mp3d`.  
+Create soft links to the data.  
 ```
-cd  habitat_tools
+cd  bellman_point_goal
 ln -s habitat-lab/data data
 ```
 The code requires the datasets in data folder in the following format:
 ```
 habitat-lab/data
-                /datasets/pointnav/mp3d/v1
-                                        /train
-                                        /val
-                                        /test
-                /scene_datasets/mp3d
-                                    /1LXtFkjw3qL
-                                    /1pXnuDYAj8r
-                                    /....
-                                    /mp3d.scene_dataset_config.json
+  └── datasets/pointnav/mp3d/v1
+       └── train
+       └── val
+       └── test
+  └── scene_datasets/mp3d
+        └── 1LXtFkjw3qL
+        └── 1pXnuDYAj8r
+        └── ....
 ```
 
 
@@ -168,7 +165,7 @@ This demo builds a topological map of the target __scene__ at a specified __heig
 <img src='Figs/demo_6.png'/> 
 
 ### Citing
-I developed this repo while I worked on the following papers.
+I developed this repo while I worked on the following papers.        
 If you find this code useful, please consider citing them.
 ```
 @inproceedings{li2022comparison,
